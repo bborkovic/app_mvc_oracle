@@ -1,0 +1,72 @@
+{% extends "Templates/mhss_search.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+   
+  <div class="row">
+    <h2 align="center">Search mHSS meas</h2>
+  </div>
+
+  <div class="row">
+   <div class="col-md-3"></div>
+    <div class="col-md-6">
+      {{ messages.message | raw }}
+      <form action="display" method="get">
+         <div class="form-group">
+            <div class="row">
+               <div class="col-sm-6">
+                  <label>Date From:</label>
+                  <select required id="date_from" class="form-control" name="date_from">
+                  </select>
+               </div>
+               <div class="col-sm-6">
+                  <label>Date To:</label>
+                  <select id="date_to" class="form-control" name="date_to">
+                  </select>
+               </div>
+            </div>
+         </div>
+        <div class="form-group">
+          <label for="time-level">Time Level</label>
+          <select id="time-level" name="time_level" class="form-control">
+             <option value="DAY">Day</option>
+             <option value="HOUR">Hour</option>
+             <option value="RAW">Raw</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="meas-class">Meas Class</label>
+            <select id="meas-class" name="meas_class" class="form-control" onchange="meas_class_selected()"></select>
+        </div>
+        <div class="form-group">
+          <label for="meas-levels">Meas Levels</label>
+          <select id="meas-levels" name="meas_levels" class="form-control" onchange="meas_level_selected()"></select>
+        </div>
+        <div class="form-group">
+          <label>Select ID's</label>
+          <select id="meas-ids" name='meas_ids[]' multiple size="10" class="form-control"></select>
+        </div>
+        <div class="form-group">
+         <input class="btn btn-default" type="submit" value="search" name="search">
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+
+
+    
+
+
+
+{% endblock %}
+
+{% block javascript %}
+   <script type="text/javascript" src="/js/searchform_data.js"></script>
+   <script type="text/javascript" src="/js/searchform.js"></script>
+{% endblock %}
+
+
+
+

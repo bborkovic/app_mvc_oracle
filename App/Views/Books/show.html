@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="books-show">
+		<table class="table">
+			<tr>
+				<td>
+					<img class="img-responsive" src="/uploads/books/{{ book.book_photo }}">
+				</td>
+				<td>
+					<ul>
+						<h4>2017</h4>
+						<h3><strong>{{ book.name }}</strong></h3>
+						<h4>{{ book.short_info }}</h4>t
+					</ul>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	<div id="sidebar">
+		<h3>Links:</h3>
+		<ul class="list-group">
+			<a href="/books/index"><li class="list-group-item">Books</li></a>
+			<a href="/publishers/index"><li class="list-group-item">Publishers</li></a>
+			<a href="/authors/index"><li class="list-group-item">Authors</li></a>
+		</ul>
+	</div>
+{% endblock %}

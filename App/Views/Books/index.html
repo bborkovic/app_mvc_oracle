@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="books-index">
+		{% for row in 0 .. books|length %}
+			<div class="row">
+				{% for book in books[row] %}
+					<div class="col-md-3">
+						<img src="/uploads/books/{{ book.book_photo }}">
+						<a href="{{ book.id }}/show">
+							<button type="button" class="btn btn-primary btn-md">Read More</button>
+						</a>
+						<h4>{{ book.name }}</h4>
+					</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+	</div>
+
+	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	<div id="sidebar">
+		<h3>Links:</h3>
+		<ul class="list-group">
+			<a href="/books/index"><li class="list-group-item">Books</li></a>
+			<a href="/publishers/index"><li class="list-group-item">Publishers</li></a>
+			<a href="/authors/index"><li class="list-group-item">Authors</li></a>
+		</ul>
+	</div>
+{% endblock %}

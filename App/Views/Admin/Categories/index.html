@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="categorys-index">
+		<table class="table">
+			<th>Name</th>
+			<th>Actions</th>
+			{% for category in categories %}
+				<tr>
+					<td>{{ category.name }}</td>
+					<td>
+						<a href="{{ category.id }}/edit">Edit</a> | 
+						<a href="{{ category.id }}/delete">Delete</a>
+					</td>
+				</tr>
+			{% endfor  %}
+		</table>
+		<a href="add-new">
+			<button type="button" class="btn btn-primary btn-md">New Category</button>
+		</a>
+	</div>
+
+<!-- 	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div> -->
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	{{ messages.sidebar | raw }}
+{% endblock %}

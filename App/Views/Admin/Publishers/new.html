@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="publishers-new">
+		{{ form.render | raw }}
+	</div>
+
+<!-- 	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div> -->
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	{{ messages.sidebar | raw }}
+{% endblock %}

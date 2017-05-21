@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="publishers-index">
+		<table class="table">
+			<th>Name</th>
+			<th>About</th>
+			<th>Actions</th>
+			{% for publisher in publishers %}
+				<tr>
+					<td>{{ publisher.name }}</td>
+					<td>{{ publisher.about }}</td>
+					<td>
+						<a href="{{ publisher.id }}/edit">Edit</a> | 
+						<a href="{{ publisher.id }}/delete">Delete</a>
+					</td>
+				</tr>
+			{% endfor  %}
+		</table>
+		<a href="add-new">
+			<button type="button" class="btn btn-primary btn-md">New Publisher</button>
+		</a>
+	</div>
+
+<!-- 	<div class="center-block" text-align="center">
+		{{ paginator.displayPagination('') | raw }}
+	</div> -->
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	{{ messages.sidebar | raw }}
+{% endblock %}

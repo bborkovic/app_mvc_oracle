@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+	<div id="books-edit">
+		{{ form.render | raw }}
+	</div>
+
+	<br/>
+	{% if messages.latest_index_url == "/" %}
+		<a href="../index">
+	{% else %}
+		<a href="{{ messages.latest_index_url }}">
+	{% endif %}
+
+	
+		<button class="btn btn-default">Back to index</button>
+	</a>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+	{{ messages.sidebar | raw }}
+{% endblock %}
