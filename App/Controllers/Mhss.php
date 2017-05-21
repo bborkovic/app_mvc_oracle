@@ -27,6 +27,7 @@ class Mhss extends \Core\Controller {
    public function displayAction() {
       $db = ModelOracle::getDB();
       $this->messages["page_title"] = "mHSS/display";
+      
       if( ! isset($_GET["search"])) {
          Session::message( array("Please make a selection!","info") );
          redirect_to('search');
@@ -48,6 +49,8 @@ class Mhss extends \Core\Controller {
          $meas_ids_string = join(',', $meas_ids_arr );
       }
 
+      $table_name = "mhss.V_PM_408_AVGOVLDPERF_DAY";
+
       // Get Columns
       $columns = $db->get_columns_of_table($table_name);
       $columns = array_diff($columns, ["STOPTIME","ENTRYDATE"]); // remove columns not necessary
@@ -61,18 +64,14 @@ class Mhss extends \Core\Controller {
       $sql .= " order by starttime, ids";
 
       // Get DB data
-      log_message("Run SQL start", $log);
       $res = $db->run_select_sql_with_columns($sql);
-      log_message("Run SQL end\n", $log);
       $data = $res[1];
       $column_with_id = "IDS";
       $column_with_timestamp = "STARTTIME";
 
-      log_message("Run JSON partition by ids", $log);
       $mr = new MeasResults($data, $columns, $column_with_id , $column_with_timestamp);
       $mr->partition_data_by_ids();
       $json_per_ci = $mr->get_json_data();
-      log_message("End JSON partition by ids\n", $log);
 
       $json_parameters = [
          "column_with_id" => $column_with_id,
@@ -87,16 +86,15 @@ class Mhss extends \Core\Controller {
       }
 
       // add links to data
-      log_message("Run Data Modification", $log);
       foreach ($data as $k=>$row) {
          $row_data = $data[$k];
          $get_data = $_GET;
-         $url_for_timestamp = generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp);
-         $url_for_id = generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         $url_for_timestamp = MeasResults::generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         $url_for_id = MeasResults::generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp);
          if($time_level == 'DAY') {
-            $date_truncated = trunc_hours_from_date( $row[$column_with_timestamp] ) . "<br/>";
-            $data[$k][$column_with_timestamp] = '<a href="display_meas.php?' . $url_for_timestamp . '">' . $date_truncated . '</a>';
-            $data[$k][$column_with_id] = '<a href="display_meas.php?' . $url_for_id . '">' . $data[$k][$column_with_id] . '</a>';
+            $date_truncated = MeasResults::trunc_hours_from_date( $row[$column_with_timestamp] ) . "<br/>";
+            $data[$k][$column_with_timestamp] = '<a href="display?' . $url_for_timestamp . '">' . $date_truncated . '</a>';
+            $data[$k][$column_with_id] = '<a href="display?' . $url_for_id . '">' . $data[$k][$column_with_id] . '</a>';
          }
          foreach ($columns as $column) {
             $val = $row[$column];
@@ -106,7 +104,13 @@ class Mhss extends \Core\Controller {
          }
       }
 
-
+      // Pass data to view
+      View::renderTemplate('Mhss/display.html', array(
+         "messages" => $this->messages,
+         "json_per_ci" => json_encode($json_per_ci),
+         "json_parameters" => json_encode($json_parameters),
+         )
+      );
 
    }
 

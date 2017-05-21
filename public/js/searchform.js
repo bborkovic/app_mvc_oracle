@@ -55,7 +55,7 @@ function populate_meas_classes() {
 }
 
 function meas_class_selected() {
-   var meas_levels = document.getElementById("meas-levels");
+   var meas_levels = document.getElementById("meas-level");
    var meas_ids = document.getElementById("meas-ids");
    while (meas_levels.hasChildNodes()) {
       meas_levels.removeChild(meas_levels.lastChild);
@@ -84,7 +84,7 @@ function meas_level_selected() {
       meas_ids.removeChild(meas_ids.lastChild);
    }
    // Get selected meas_level
-   var meas_levels = document.getElementById("meas-levels");
+   var meas_levels = document.getElementById("meas-level");
    var level = meas_levels.value;
    // Get selected table_name
    var table_name = document.getElementById("meas-class").value;

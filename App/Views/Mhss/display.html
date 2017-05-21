@@ -1,0 +1,28 @@
+{% extends "Templates/base_mhss.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+   
+  <div class="row">
+    <h2 align="center">mHSS measurements</h2>
+  </div>
+
+
+   {{ json_parameters }}
+   {{ json_per_ci }}
+   {{ json_columns }}
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+   <script type="text/javascript" src="/js/searchform_data.js"></script>
+   <script type="text/javascript" src="/js/searchform.js"></script>
+{% endblock %}
+
+
+
+

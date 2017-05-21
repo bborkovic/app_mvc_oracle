@@ -57,6 +57,47 @@ class MeasResults{
       return $json_return;
    }
 
+   public static function generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+      $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
+      $endtime = clone $starttime;
+      $endtime->modify('+1 day');
+      $starttime_string = $starttime->format('d.m.Y');
+      $endtime_string = $endtime->format('d.m.Y');
+
+      $url_array_ids = [];
+      $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
+      $url_array_ids["date_from"] = $starttime_string;
+      $url_array_ids["date_to"] = $endtime_string;
+      $url_array_ids["time_level"] = "HOUR";
+      $url_array_ids["meas_level"] = $get_data["meas_level"];
+      $url_array_ids["meas_class"] = $get_data["meas_class"];
+      $url_string_ids = http_build_query($url_array_ids);
+      return $url_string_ids;
+   }
+
+   public static function generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+      $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
+      $endtime = clone $starttime;
+      $starttime->modify('-30 day');
+      $endtime->modify('+10 day');
+      $starttime_string = $starttime->format('d.m.Y');
+      $endtime_string = $endtime->format('d.m.Y');
+
+      $url_array_ids = [];
+      $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
+      $url_array_ids["date_from"] = $starttime_string;
+      $url_array_ids["date_to"] = $endtime_string;
+      $url_array_ids["time_level"] = $get_data["time_level"];
+      $url_array_ids["meas_level"] = $get_data["meas_level"];
+      $url_array_ids["meas_class"] = $get_data["meas_class"];
+      $url_string_ids = http_build_query($url_array_ids);
+      return $url_string_ids;
+   }
+
+   public static function trunc_hours_from_date($datetime) {
+      return preg_replace('/(\d{1,2})\.(\d{1,2})\.(\d{1,4}) .*/', '$1.$2.$3',$datetime );
+   }
+
 }
 
 
