@@ -26,8 +26,10 @@ class DatabaseOracle {
 			$conn = oci_connect(Config::DB_USER, Config::DB_PASS, Config::DB_SERVER . '/' . Config::DB_NAME, 'AL32UTF8');
          $stid = oci_parse($conn, "alter session set nls_date_format = 'dd.mm.yyyy hh24:mi'");
          oci_execute($stid);
-		} catch (Exception $e) {
-			throw new Exception("Error: Database Connection Failed! " 
+         $stid = oci_parse($conn, "ALTER SESSION SET NLS_NUMERIC_CHARACTERS = '. '");
+         oci_execute($stid);
+		} catch (\Exception $e) {
+			throw new \Exception("Error: Database Connection Failed! " 
 				. "<br/>" . $e->getMessage() 
 				. "<br/>" . $e->getFile()
 			);

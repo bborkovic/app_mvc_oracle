@@ -40,7 +40,7 @@ class Mhss extends \Core\Controller {
       $time_level = $_GET['time_level'];
       $meas_level = $_GET['meas_level'];
       $meas_class = $_GET['meas_class'];
-      $table_name = 'V_' . $_GET['meas_class'] . '_' . $time_level;
+      $table_name = 'mhss.V_' . $_GET['meas_class'] . '_' . $time_level;
       if( !isset($_GET['meas_ids'])) {
          print "Meas Ids not selected, select all";
       } else {
@@ -48,8 +48,6 @@ class Mhss extends \Core\Controller {
          foreach ($meas_ids_arr as $k => $v) { $meas_ids_arr[$k] = "'" . $v . "'"; }
          $meas_ids_string = join(',', $meas_ids_arr );
       }
-
-      $table_name = "mhss.V_PM_408_AVGOVLDPERF_DAY";
 
       // Get Columns
       $columns = $db->get_columns_of_table($table_name);
@@ -62,6 +60,7 @@ class Mhss extends \Core\Controller {
       $sql .= " and ids in ( " . $meas_ids_string . " )";
       $sql = "select * from ( " . $sql . " ) where rownum <= 10000";
       $sql .= " order by starttime, ids";
+
 
       // Get DB data
       $res = $db->run_select_sql_with_columns($sql);
@@ -109,6 +108,9 @@ class Mhss extends \Core\Controller {
          "messages" => $this->messages,
          "json_per_ci" => json_encode($json_per_ci),
          "json_parameters" => json_encode($json_parameters),
+         "json_columns" => json_encode($json_columns),
+         "json_data" => json_encode($data),
+         "columns" => $columns,
          )
       );
 
