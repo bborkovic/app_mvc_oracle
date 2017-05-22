@@ -1,29 +1,33 @@
 <?php  
 
-namespace Core;
+namespace App\Helper;
 
 class MeasResults{
 
    public $data;
    public $data_partitioned;
    public $columns;
-   public $id_column;
+   public $column_with_id;
    public $meas_ids;
-   public $time_column;
+   public $column_with_timestamp;
+   public $time_level;
 
-   public function __construct( $data, $columns, $id_column, $time_column ) {
-      // $data should be sorted by time_column, id_column
+
+   public function __construct( $data, $columns, $column_with_id, $column_with_timestamp, $time_level ) {
+      // $data should be sorted by column_with_timestamp, column_with_id
       $this->data = $data;
       $this->columns = $columns;
-      $this->id_column = $id_column;
-      $this->time_column = $time_column;
+      $this->column_with_id = $column_with_id;
+      $this->column_with_timestamp = $column_with_timestamp;
+      $this->time_level = $time_level;
+
    }
 
    public function partition_data_by_ids() {
       $partitioned_data = [];
-      $id_column = $this->id_column;
+      $column_with_id = $this->column_with_id;
       foreach ($this->data as $row) {
-         $id = $row[$id_column];
+         $id = $row[$column_with_id];
          if ( !array_key_exists($id,$partitioned_data) ) {
             $partitioned_data[$id] = [];
          }
@@ -57,7 +61,34 @@ class MeasResults{
       return $json_return;
    }
 
-   public static function generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+   public function add_links_to_data($get_data) {
+      $column_with_id = $this->column_with_id;
+      $column_with_timestamp = $this->column_with_timestamp;
+      $time_level = $this->time_level;
+      
+      foreach ($this->data as $k=>$row) {
+         $row_data = $this->data[$k];
+         $url_for_timestamp = $this->generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         $url_for_id = $this->generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         if($time_level == 'DAY') {
+            $date_truncated = $this->trunc_hours_from_date( $row[$column_with_timestamp] ) . "<br/>";
+            $this->data[$k][$column_with_timestamp] = '<a href="display?' . $url_for_timestamp . '">' . $date_truncated . '</a>';
+            $this->data[$k][$column_with_id] = '<a href="display?' . $url_for_id . '">' . $this->data[$k][$column_with_id] . '</a>';
+         }
+         foreach ($this->columns as $column) {
+            $val = $row[$column];
+            if(is_numeric($val)){
+               $this->data[$k][$column] = round($val,2);
+            }
+         }
+      }
+      return $this->data;
+   }
+
+
+
+
+   public function generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp) {
       $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
       $endtime = clone $starttime;
       $endtime->modify('+1 day');
@@ -75,7 +106,7 @@ class MeasResults{
       return $url_string_ids;
    }
 
-   public static function generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+   public function generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp) {
       $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
       $endtime = clone $starttime;
       $starttime->modify('-30 day');
@@ -94,7 +125,7 @@ class MeasResults{
       return $url_string_ids;
    }
 
-   public static function trunc_hours_from_date($datetime) {
+   public function trunc_hours_from_date($datetime) {
       return preg_replace('/(\d{1,2})\.(\d{1,2})\.(\d{1,4}) .*/', '$1.$2.$3',$datetime );
    }
 

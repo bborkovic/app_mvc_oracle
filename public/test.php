@@ -1,9 +1,25 @@
 <?php
 
-   $dt = '25.10.2016 10:30';
-   echo $dt;
-   $starttime = DateTime::createFromFormat( 'd.m.Y H:i', $dt);
-   var_dump($starttime);
+   // class Test {
+   //    public $arr;
+   //    public function __initialize( $in_array){
+   //       $this->arr = $in_array;
+   //    }
+   // }
+   function change_array($in_arr) { 
+      $in_arr[0] = "Jedan";
+      echo join(', ', $in_arr) . "<br/>";
+   }
+
+
+   $arr = [ "jedan", "dva", "tri"];
+   echo join(', ', $arr) . "<br/>";
+
+   change_array($arr);
+
+   echo join(', ', $arr) . "<br/>";
+
+
 
  ?>
 
