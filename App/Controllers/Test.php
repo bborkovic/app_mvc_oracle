@@ -14,13 +14,14 @@ use Core\View;
 class Test extends \Core\Controller {
 	
 	public function indexAction() {
+      echo "<br/>";
+      echo "I'm in Test/index action";
+      // $this->messages["page_title"] = "Test/index";
 
-      $this->messages["page_title"] = "Test/index";
-
-      View::renderTemplate('Test/index.html', array(
-         "messages" => $this->messages,
-         ) 
-      );
+      // View::renderTemplate('Test/index.html', array(
+      //    "messages" => $this->messages,
+      //    ) 
+      // );
 
 
 
@@ -28,9 +29,7 @@ class Test extends \Core\Controller {
 
 
    public function before() {
-      $this->messages = [];
-      $this->messages["username"] = User::get_logged_username();
-      $this->messages["message"] = get_message();
+      echo "before action in Test controller is called ";
    }
 
 

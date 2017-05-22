@@ -41,32 +41,26 @@ class Mhss extends \Core\Controller {
       $meas_level = $_GET['meas_level'];
       $meas_class = $_GET['meas_class'];
       $table_name = 'mhss.V_' . $_GET['meas_class'] . '_' . $time_level;
-      if( !isset($_GET['meas_ids'])) {
-         print "Meas Ids not selected, select all";
-      } else {
-         $meas_ids_arr = $_GET['meas_ids'];
-         foreach ($meas_ids_arr as $k => $v) { $meas_ids_arr[$k] = "'" . $v . "'"; }
-         $meas_ids_string = join(',', $meas_ids_arr );
-      }
+      $meas_ids_arr = $_GET['meas_ids'];
+      foreach ($meas_ids_arr as $k => $v) { $meas_ids_arr[$k] = "'" . $v . "'"; }
+      $meas_ids_string = join(',', $meas_ids_arr );
 
       // Get Columns
       $columns = $db->get_columns_of_table($table_name);
       $columns = array_diff($columns, ["STOPTIME","ENTRYDATE"]); // remove columns not necessary
       // Create SQL
       $sql = "select " . join(', ', $columns) . " from " . $table_name;
-      $sql .= " where starttime >= to_date('" . $date_from . "' ,'dd.mm.yyyy')";
-      $sql .= " and starttime < to_date('" . $date_to . "' ,'dd.mm.yyyy') + 1";
-      $sql .= " and vrsta = '" . $meas_level . "'";
-      $sql .= " and ids in ( " . $meas_ids_string . " )";
-      $sql = "select * from ( " . $sql . " ) where rownum <= 10000";
-      $sql .= " order by starttime, ids";
-
+         $sql .= " where starttime >= to_date('" . $date_from . "' ,'dd.mm.yyyy')";
+         $sql .= " and starttime < to_date('" . $date_to . "' ,'dd.mm.yyyy') + 1";
+         $sql .= " and vrsta = '" . $meas_level . "'";
+         $sql .= " and ids in ( " . $meas_ids_string . " )";
+         $sql = "select * from ( " . $sql . " ) where rownum <= 10000";
+         $sql .= " order by starttime, ids";
 
       // Get DB data
       $res = $db->run_select_sql_with_columns($sql);
       $data = $res[1];
-      $column_with_id = "IDS";
-      $column_with_timestamp = "STARTTIME";
+      $column_with_id = "IDS"; $column_with_timestamp = "STARTTIME";
 
       $mr = new MeasResults($data, $columns, $column_with_id , $column_with_timestamp);
       $mr->partition_data_by_ids();
@@ -119,6 +113,10 @@ class Mhss extends \Core\Controller {
 
 
    public function before() {
+      if( !Session::is_logged_in()){
+         Session::message( [ "You have to login first to access mHSS measurements!", "warning" ] );
+         redirect_to('/users/login');
+      }
       $this->messages = [];
       $this->messages["username"] = User::get_logged_username();
       $this->messages["message"] = get_message();

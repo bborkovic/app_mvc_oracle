@@ -146,12 +146,14 @@ class Session {
 		return $current_url;
 	}
 
-	public static function get_latest_url_not_like($not_like) {
+	public static function get_latest_url_not_like($not_like_arr) {
 		$current_url = static::$url[0];
 		foreach (static::$url as $url) {
-			if($url != $current_url and !(strpos($url, $not_like) !== false) ){
-				return $url;
-			}
+         $test = 0;
+         foreach ($not_like_arr as $not_like) {
+            if ( strpos($url, $not_like) !== false ) { $test = 1; }
+         }
+			if( $test == 0 ){ return $url; }
 		}
 		return '';
 	}

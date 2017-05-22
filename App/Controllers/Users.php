@@ -11,34 +11,30 @@ use App\Models\User;
 
 class Users extends \Core\Controller {
 	
-	public function login() {
-		// message("Hello from Controller: " . get_class($this) . ", Action: login()", "success");
-		$message = "";
-		if( isset($_POST['submit'])) {
+	public function loginAction() {
 
-			$username = htmlspecialchars( $_POST['username'] );
-			$password = htmlspecialchars( $_POST['password'] );
-
-			$found_user = User::authenticate( $username, $password );
-			if($found_user) {
-				Session::login($found_user);
-				Session::message( array("You are logged in!","success") );
-				redirect_to('/' . Session::get_latest_url_not_like('logout'));
-            // redirect_to('/test/index');
-			} else {
-            echo "username/password not correct";
-				Session::message( array("Username/password combination not correct!","error") );
-			}
-
-		} 
-		$form = new Form("User", ["username", "password"]);
-		$form->action = "/users/login";
 		View::renderTemplate('Users/login.html', array(
-			"form" => $form ,
-			"message" => get_message(),
+			"messages" => $this->messages,
 			) 
 		);
 	}
+
+   public function processloginAction() {
+      if( isset($_POST['submit'])) {
+         $username = htmlspecialchars( $_POST['username'] );
+         $password = htmlspecialchars( $_POST['password'] );
+
+         $found_user = User::authenticate( $username, $password );
+         if($found_user) {
+            Session::login($found_user);
+            Session::message( array("You are logged in!","success") );
+            redirect_to('/' . Session::get_latest_url_not_like( ['logout', 'login']));
+         } else {
+            Session::message( array("Username/password combination not correct!","error") );
+            redirect_to('/users/login');
+         }
+      }
+   }
 
 	public function logout() {
 		Session::message(["Logout Complete" , "success"]);
@@ -50,8 +46,11 @@ class Users extends \Core\Controller {
 	protected function after() {
 	}
 
-	protected function before() {
-	}
+   public function before() {
+      $this->messages = [];
+      $this->messages["username"] = User::get_logged_username();
+      $this->messages["message"] = get_message();
+   }
 
 }
 
