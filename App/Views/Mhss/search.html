@@ -9,8 +9,8 @@
   </div>
 
   <div class="row">
-   <div class="col-md-3"></div>
-    <div class="col-md-6">
+   <div class="col-md-4"></div>
+    <div class="col-md-4">
       {{ messages.message | raw }}
       <form action="display" method="get">
          <div class="form-group">
@@ -52,7 +52,7 @@
         </div>
       </form>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-4"></div>
   </div>
 
 
@@ -63,7 +63,11 @@
 {% endblock %}
 
 {% block javascript %}
-   <script type="text/javascript" src="/js/searchform_data.js"></script>
+   <script type="text/javascript">
+      var meas_classes = {{ json_meas_classes | raw }};
+      var meas_tables_levels = {{ json_meas_levels | raw }};
+      var meas_tables_levels_ids = {{ json_meas_ids | raw }};
+   </script>
    <script type="text/javascript" src="/js/searchform.js"></script>
 {% endblock %}
 

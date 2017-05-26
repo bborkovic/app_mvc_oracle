@@ -24,4 +24,5 @@ $(document).ready(function() {
     } );
     table.buttons().container()
         .appendTo( '#example_wrapper .col-sm-6:eq(0)' );
+        // .appendTo( '#example .col-sm-6:eq(0)' );
 } );

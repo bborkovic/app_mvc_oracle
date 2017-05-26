@@ -5,8 +5,8 @@
       {# <title>Sela2p | Title</title> #}
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<!-- Bootstrap -->
-		<script src="/js/lib/jquery-3.1.0.min.js"></script>
-		<script src="/js/lib/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/js/lib/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="/js/lib/bootstrap.min.js"></script>
 		<link href="/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/css/mycss.css" rel="stylesheet">
 	</head>
@@ -14,7 +14,7 @@
 
 	<body>
 
-		<nav class="navbar navbar-default navbar-fixed-top">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container-fluid">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
@@ -79,18 +79,16 @@
 		<section>
 			<div class="container">
 				<div class="row">
-					<div class="col-md-9">
+               <h2 align="center">Login Form</h2>
+               <br/><br/>
+               <div class="col-md-3"></div>
+					<div class="col-md-6">
 						<!-- Main Content !!-->
 						{{ messages.message | raw }}
 						{% block body %}
 						{% endblock %}
 					</div>
-					<div class="col-md-1"></div>
-					<div class="col-md-2">
-						<!-- Sidebar!! -->
-						{% block sidebar %}
-						{% endblock %}
-					</div>
+					<div class="col-md-3"></div>
 				</div>
     		</div>
 		</section>
