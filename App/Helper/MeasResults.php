@@ -20,7 +20,6 @@ class MeasResults{
       $this->column_with_id = $column_with_id;
       $this->column_with_timestamp = $column_with_timestamp;
       $this->time_level = $time_level;
-
    }
 
    public function partition_data_by_ids() {
@@ -85,9 +84,6 @@ class MeasResults{
       return $this->data;
    }
 
-
-
-
    public function generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp) {
       $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
       $endtime = clone $starttime;
@@ -127,6 +123,43 @@ class MeasResults{
 
    public function trunc_hours_from_date($datetime) {
       return preg_replace('/(\d{1,2})\.(\d{1,2})\.(\d{1,4}) .*/', '$1.$2.$3',$datetime );
+   }
+
+   public static function get_mhss_meas_classes_json($db) {
+      $sql = "select meas_class from mhss.v_meas_classes";
+      $results = $db->query_select($sql);
+      $json_arr = [];
+      foreach ($results as $row) {
+         $meas_class = $row['MEAS_CLASS'];
+         $json_arr[] = [ "id" => $meas_class, "value" => $meas_class ];
+      }
+      return json_encode($json_arr);
+   }
+
+   public static function get_mhss_meas_levels_json($db) {
+      $sql = "select meas_class, levs from mhss.v_meas_levels";
+      $results = $db->query_select($sql);
+      $json_arr = [];
+      foreach ($results as $row) {
+         $meas_class = $row['MEAS_CLASS'];
+         $levels = $row['LEVS'];
+         $levels_arr = explode(',', $levels);
+         $json_arr[$meas_class] = $levels_arr;
+      }
+      return json_encode($json_arr);
+   }   
+
+   public static function get_mhss_meas_ids_json($db) {
+      $sql = "select meas_class_vrsta, ids from mhss.v_meas_ids";
+      $results = $db->query_select($sql);
+      $json_arr = [];
+      foreach ($results as $row) {
+         $meas_class_vrsta = $row['MEAS_CLASS_VRSTA'];
+         $ids = $row['IDS'];
+         $ids_arr = explode(',', $ids);
+         $json_arr[$meas_class_vrsta] = $ids_arr;
+      }
+      return json_encode($json_arr);
    }
 
 }

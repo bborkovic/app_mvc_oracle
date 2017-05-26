@@ -17,9 +17,24 @@ use Core\View;
 class Mhss extends \Core\Controller {
 	
 	public function searchAction() {
+      $db = ModelOracle::getDB(); // Get Access to DatabaseOracle Class
       $this->messages["page_title"] = "mHSS/index";
+      
+      $json_meas_classes  = MeasResults::get_mhss_meas_classes_json($db);
+      // -> js var meas_classes
+
+      $json_meas_levels  = MeasResults::get_mhss_meas_levels_json($db);
+      // -> js var meas_tables_levels
+      
+      $json_meas_ids  = MeasResults::get_mhss_meas_ids_json($db);
+      // -> js var meas_tables_levels_ids
+
+
       View::renderTemplate('Mhss/search.html', array(
-         "messages" => $this->messages,
+            "messages" => $this->messages,
+            "json_meas_classes" => $json_meas_classes,
+            "json_meas_levels" => $json_meas_levels,
+            "json_meas_ids" => $json_meas_ids,
          )
       );
 	}
@@ -101,6 +116,7 @@ class Mhss extends \Core\Controller {
       $this->messages["username"] = User::get_logged_username();
       $this->messages["message"] = get_message();
    }
+
 
 
 }

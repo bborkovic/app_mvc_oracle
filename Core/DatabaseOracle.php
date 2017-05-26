@@ -105,10 +105,10 @@ class DatabaseOracle {
 			$sth = oci_parse( $this->connection , $sql );
 			oci_execute($sth);
 		} catch (Exception $e) {
-			$bind_array_text = var_export($bind_array,true);
+			//$bind_array_text = var_export($bind_array,true);
 			throw new Exception("Error: The Database Query Failed! , " 
 				. "<br/>sql: " . $sql 
-				. "<br/>binds: " . $bind_array_text
+				//. "<br/>binds: " . $bind_array_text
 				. "<br/>" . $e->getMessage()
 			);
 		}
