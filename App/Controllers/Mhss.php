@@ -40,6 +40,7 @@ class Mhss extends \Core\Controller {
 	}
 
    public function displayAction() {
+
       $db = ModelOracle::getDB(); // Get Access to DatabaseOracle Class
       $this->messages["page_title"] = "mHSS/display";
       
@@ -47,7 +48,8 @@ class Mhss extends \Core\Controller {
       $column_with_id = "IDS"; $column_with_timestamp = "STARTTIME"; // For this measurements , define columns with ids, and time
 
       // Select table based on meas_class/time_level combination
-      $table_name = 'mhss.V_' . $_GET['meas_class'] . '_' . $_GET['time_level'];
+      $view_start = ( $_GET['kpi_counter'] == 'kpi' ) ? 'VK_' : 'V_';
+      $table_name = 'mhss.' . $view_start . $_GET['meas_class'] . '_' . $_GET['time_level'];
 
       // select fields from $_GET
       $date_from = $_GET['date_from']; $date_to = $_GET['date_to']; $time_level = $_GET['time_level'];
@@ -59,10 +61,11 @@ class Mhss extends \Core\Controller {
 
       // Get Columns for SQL
       $columns = $db->get_columns_of_table($table_name);
+      $columns_for_sql = array_map( function($el) { return '"' . $el . '"'; } , $columns);
       $columns = array_diff($columns, ["STOPTIME","ENTRYDATE"]); // remove unnecessary columns
-      
+
       // Create SQL
-      $sql = "select " . join(', ', $columns) . " from " . $table_name;
+      $sql = "select " . join(', ', $columns_for_sql) . " from " . $table_name;
          $sql .= " where starttime >= to_date('" . $date_from . "' ,'dd.mm.yyyy')";
          $sql .= " and starttime < to_date('" . $date_to . "' ,'dd.mm.yyyy') + 1";
          $sql .= " and vrsta = '" . $meas_level . "'";

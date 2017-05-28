@@ -126,12 +126,13 @@ class MeasResults{
    }
 
    public static function get_mhss_meas_classes_json($db) {
-      $sql = "select meas_class from mhss.v_meas_classes";
+      $sql = "select meas_class , kpi , counter from mhss.v_meas_classes";
       $results = $db->query_select($sql);
       $json_arr = [];
       foreach ($results as $row) {
          $meas_class = $row['MEAS_CLASS'];
-         $json_arr[] = [ "id" => $meas_class, "value" => $meas_class ];
+         $kpi = $row['KPI'];
+         $json_arr[] = [ "id" => $meas_class, "value" => $meas_class , "kpi" => $kpi];
       }
       return json_encode($json_arr);
    }

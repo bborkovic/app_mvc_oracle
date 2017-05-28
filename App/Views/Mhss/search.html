@@ -37,12 +37,29 @@
         </div>
         <div class="form-group">
           <label for="meas-class">Meas Class</label>
-            <select id="meas-class" name="meas_class" class="form-control" onchange="meas_class_selected()"></select>
+            <select id="meas-class" name="meas_class" class="form-control"></select>
         </div>
-        <div class="form-group">
-          <label for="meas-level">Meas Levels</label>
-          <select id="meas-level" name="meas_level" class="form-control" onchange="meas_level_selected()"></select>
+        <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                  <label for="meas-level">Meas Levels</label>
+                  <select id="meas-level" name="meas_level" class="form-control"></select>
+               </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+               <div class="form-group form-check">
+                  {# <select id="meas-level" name="meas_level" class="form-control"></select> #}
+                  <div class="radio">
+                     <input id="kpis" type="radio" name="kpi_counter" value="kpi" class="form-check-input">Kpi</input>
+                  </div>
+                  <div class="radio">
+                     <input id="counters" type="radio" name="kpi_counter" value="counter" class="form-check-input">Counters</input>
+                  </div>
+               </div>
+            </div>
         </div>
+
         <div class="form-group">
           <label>Select ID's</label>
           <select id="meas-ids" name='meas_ids[]' multiple size="10" class="form-control"></select>

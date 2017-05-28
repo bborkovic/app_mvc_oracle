@@ -1,0 +1,98 @@
+{% extends "Templates/base_mhss.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+   
+   <div id="container" class="container-fluid">
+
+      <div id="top">
+         <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+               <h1 align="center">Femto Measurements</h1>
+               <h3 align="center"><a href="search">Back to Search</a></h3>
+            </div>
+            <div class="col-md-4"></div>
+         </div>
+      </div> <!-- top -->
+
+     <div id="main">
+
+        <!-- If there is only one chart, place it here -->
+        <div id="single-chart" class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8"><div id="chart-container" class="chart centered"></div></div>
+          <div class="col-md-2"></div>
+        </div> <!-- row -->
+
+         <!-- If there are many charts, place it here, in grid -->
+        <div id="multiple-charts">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5"><div id="chart-container-1" class="chart centered"></div></div>
+                <div class="col-md-5"><div id="chart-container-2" class="chart centered"></div></div>
+                <div class="col-md-1"></div>         
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5"><div id="chart-container-3" class="chart centered"></div></div>
+                <div class="col-md-5"><div id="chart-container-4" class="chart centered"></div></div>
+                <div class="col-md-1"></div>         
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-5"><div id="chart-container-5" class="chart centered"></div></div>
+                <div class="col-md-5"><div id="chart-container-6" class="chart centered"></div></div>
+                <div class="col-md-1"></div>         
+            </div>
+        </div> <!-- multiple-charts -->
+
+     <br/>
+
+     <div class="row">
+       <div class="col-md-12">
+         
+         <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+         <button onclick="createChart()" class="btn btn-default center-block">Chart Selected</button>
+            <!-- Header of Table -->
+            <thead align="left">
+               <!-- Checkboxes in header -->
+               <tr id="checkboxes">
+               {%  for column_name in columns %}
+               <!-- <?php foreach($columns as $column_name): ?> -->
+                 <th rowspacn="1" style="text-align: center; vertical-align: middle;"><input class="checkbox" type="checkbox" name="{{ column_name }}"></th>
+               {% endfor %}
+               </tr>
+                <tr id="column-names">
+                   {%  for column_name in columns %}
+                      <th>{{ column_name|replace({'_': " "}) }}</th>
+                   {%  endfor %}
+                </tr>
+            </thead>
+            <tbody><!-- Tbody will be populated by datatables plugin --></tbody>
+         </table>  
+       </div>
+     </div>
+    </div> <!-- main -->
+   </div> <!-- Container-->
+
+
+
+{% endblock %}
+
+{% block javascript %}
+   <script type="text/javascript">
+      var json_parameters = {{ json_parameters | raw }};
+      var json_data_per_id = {{ json_per_ci | raw }};
+      var json_columns = {{ json_columns | raw }};
+      var json_datatable = {{ json_data | raw }};
+   </script>
+   <script type="text/javascript" src="/js/femto/displaydatatable.js"></script>
+   <script type="text/javascript" src="/js/femto/chartSelected.js"></script>
+{% endblock %}
+
+
+
+
+
