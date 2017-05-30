@@ -4,6 +4,10 @@ body {
     font-size: 12px;
   }
 
+.row.extra-padding {
+   margin-bottom: 20px;
+}
+
 
 /*body {
     padding-top: 50px;

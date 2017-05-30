@@ -1,28 +1,41 @@
-{% extends "Templates/base.html" %}
+{% extends "Templates/base_mhss.html" %}
 
 {% block title %}Home{% endblock %}
 
 {% block body %}
 
-	<div id="login">
+	<div id="login" class="container">
+
+      <div class="row">
          
-      <form action="/users/processlogin" method="post">
-         <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" name="username" class="form-control">
+         <div class="col-md-4"></div>
+         <div class="col-md-4">
+
+         {{ messages.message | raw }}
+
+            <form action="/users/processlogin" method="post">
+               <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" class="form-control">
+               </div>
+
+               <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" class="form-control">
+               </div>         
+
+              <div class="form-group">
+                  <input class="btn btn-default" type="submit" value="Submit" name="submit">
+              </div>
+
+
+            </form>
+
          </div>
+         <div class="col-md-4"></div>
 
-         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" class="form-control">
-         </div>         
+      </div>
 
-        <div class="form-group">
-            <input class="btn btn-default" type="submit" value="Submit" name="submit">
-        </div>
-
-
-      </form>
 
 	</div>
 

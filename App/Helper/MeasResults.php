@@ -11,6 +11,7 @@ class MeasResults{
    public $meas_ids;
    public $column_with_timestamp;
    public $time_level;
+   public $get_data;
 
 
    public function __construct( $data, $columns, $column_with_id, $column_with_timestamp, $time_level ) {
@@ -98,6 +99,7 @@ class MeasResults{
       $url_array_ids["time_level"] = "HOUR";
       $url_array_ids["meas_level"] = $get_data["meas_level"];
       $url_array_ids["meas_class"] = $get_data["meas_class"];
+      $url_array_ids["kpi_counter"] = $get_data["kpi_counter"];
       $url_string_ids = http_build_query($url_array_ids);
       return $url_string_ids;
    }
@@ -110,13 +112,17 @@ class MeasResults{
       $starttime_string = $starttime->format('d.m.Y');
       $endtime_string = $endtime->format('d.m.Y');
 
-      $url_array_ids = [];
+      // new URL is old URL , some keys will be changed!
+      $url_array_ids = $get_data;
+
+      // $url_array_ids = [];
       $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
       $url_array_ids["date_from"] = $starttime_string;
       $url_array_ids["date_to"] = $endtime_string;
-      $url_array_ids["time_level"] = $get_data["time_level"];
-      $url_array_ids["meas_level"] = $get_data["meas_level"];
-      $url_array_ids["meas_class"] = $get_data["meas_class"];
+      // $url_array_ids["time_level"] = $get_data["time_level"];
+      // $url_array_ids["meas_level"] = $get_data["meas_level"];
+      // $url_array_ids["meas_class"] = $get_data["meas_class"];
+      // $url_array_ids["kpi_counter"] = $get_data["kpi_counter"];
       $url_string_ids = http_build_query($url_array_ids);
       return $url_string_ids;
    }
