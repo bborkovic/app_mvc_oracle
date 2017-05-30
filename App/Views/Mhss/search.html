@@ -31,7 +31,7 @@
           <label for="time-level">Time Level</label>
           <select id="time-level" name="time_level" class="form-control">
              <option value="DAY">Day</option>
-             <option value="HOUR">Hour</option>
+             <option value="HR">Hour</option>
              <option value="RAW">Raw</option>
           </select>
         </div>
@@ -39,6 +39,8 @@
           <label for="meas-class">Meas Class</label>
             <select id="meas-class" name="meas_class" class="form-control"></select>
         </div>
+        <!-- Add drill down, set to false when going from form -->
+        <input type="hidden" name="drill_down" value="false" />
         <div class="row">
             <div class="col-md-6">
                <div class="form-group">

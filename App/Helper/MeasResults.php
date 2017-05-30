@@ -69,12 +69,14 @@ class MeasResults{
       foreach ($this->data as $k=>$row) {
          $row_data = $this->data[$k];
          $url_for_timestamp = $this->generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp);
-         $url_for_id = $this->generate_url_for_id($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         $url_for_id = $this->generate_url_for_drill_id($row_data, $get_data, $column_with_id, $column_with_timestamp);
+         
          if($time_level == 'DAY') {
             $date_truncated = $this->trunc_hours_from_date( $row[$column_with_timestamp] ) . "<br/>";
             $this->data[$k][$column_with_timestamp] = '<a href="display?' . $url_for_timestamp . '">' . $date_truncated . '</a>';
-            $this->data[$k][$column_with_id] = '<a href="display?' . $url_for_id . '">' . $this->data[$k][$column_with_id] . '</a>';
          }
+         $this->data[$k][$column_with_id] = '<a href="display?' . $url_for_id . '">' . $this->data[$k][$column_with_id] . '</a>';
+
          foreach ($this->columns as $column) {
             $val = $row[$column];
             if(is_numeric($val)){
@@ -86,20 +88,20 @@ class MeasResults{
    }
 
    public function generate_url_for_timestamp($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+      // drill down from day -> Hour
       $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
       $endtime = clone $starttime;
       $endtime->modify('+1 day');
       $starttime_string = $starttime->format('d.m.Y');
       $endtime_string = $endtime->format('d.m.Y');
-
-      $url_array_ids = [];
+      
+      // new URL is old URL , some keys will be changed!
+      $url_array_ids = $get_data;
+      $url_array_ids["drill_down"] = "false";
       $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
       $url_array_ids["date_from"] = $starttime_string;
       $url_array_ids["date_to"] = $endtime_string;
-      $url_array_ids["time_level"] = "HOUR";
-      $url_array_ids["meas_level"] = $get_data["meas_level"];
-      $url_array_ids["meas_class"] = $get_data["meas_class"];
-      $url_array_ids["kpi_counter"] = $get_data["kpi_counter"];
+      $url_array_ids["time_level"] = "HR";
       $url_string_ids = http_build_query($url_array_ids);
       return $url_string_ids;
    }
@@ -119,13 +121,47 @@ class MeasResults{
       $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
       $url_array_ids["date_from"] = $starttime_string;
       $url_array_ids["date_to"] = $endtime_string;
+      $url_string_ids = http_build_query($url_array_ids);
+      return $url_string_ids;
+   }
+
+   public function generate_url_for_drill_id($row_data, $get_data, $column_with_id, $column_with_timestamp) {
+      $starttime = \DateTime::createFromFormat( 'd.m.Y H:i', $row_data[$column_with_timestamp]);
+      $endtime = clone $starttime;
+      $starttime->modify('-30 day');
+      $endtime->modify('+10 day');
+      $starttime_string = $starttime->format('d.m.Y');
+      $endtime_string = $endtime->format('d.m.Y');
+
+      // new URL is old URL , some keys will be changed!
+      $url_array_ids = $get_data;
+
+      // $url_array_ids = [];
+      $url_array_ids[ "meas_ids"] = array($row_data[$column_with_id] );
+      $url_array_ids["drill_down"] = "true";
+
+      $child_meas_level = $get_data['meas_level'];
+      if ($get_data['meas_level'] == 'NODEID') {
+         $child_meas_level = 'CARDID';
+      } 
+      if ($get_data['meas_level'] == 'CARDID') {
+         $child_meas_level = 'PEER';
+      }
+      $url_array_ids["meas_level"] = $child_meas_level;
+      // $url_array_ids["date_from"] = $starttime_string;
+      // $url_array_ids["date_to"] = $endtime_string;
       // $url_array_ids["time_level"] = $get_data["time_level"];
       // $url_array_ids["meas_level"] = $get_data["meas_level"];
       // $url_array_ids["meas_class"] = $get_data["meas_class"];
       // $url_array_ids["kpi_counter"] = $get_data["kpi_counter"];
       $url_string_ids = http_build_query($url_array_ids);
       return $url_string_ids;
+      // NODEID,CARDID,PEER
    }
+
+
+
+
 
    public function trunc_hours_from_date($datetime) {
       return preg_replace('/(\d{1,2})\.(\d{1,2})\.(\d{1,4}) .*/', '$1.$2.$3',$datetime );

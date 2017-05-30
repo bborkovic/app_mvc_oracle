@@ -69,7 +69,13 @@ class Mhss extends \Core\Controller {
          $sql .= " where starttime >= to_date('" . $date_from . "' ,'dd.mm.yyyy')";
          $sql .= " and starttime < to_date('" . $date_to . "' ,'dd.mm.yyyy') + 1";
          $sql .= " and vrsta = '" . $meas_level . "'";
-         $sql .= " and ids in ( " . $meas_ids_string . " )";
+
+         if($get_data['drill_down'] == 'false') {
+            $sql .= " and ids in ( " . $meas_ids_string . " )";            
+         } else {
+            $sql .= " and ids like '" . $get_data['meas_ids'][0] . "%' ";
+         }
+         // echo $sql;
          $sql = "select * from ( " . $sql . " ) where rownum <= 10000";
          $sql .= " order by starttime, ids";
 

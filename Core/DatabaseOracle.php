@@ -82,6 +82,7 @@ class DatabaseOracle {
    public function get_columns_of_table($table_name){
     // Prepare the statement
        $sql = "select * from $table_name where 1=2";
+       // echo $sql;
        $stid = oci_parse($this->connection, $sql);
        if (!$stid) {
            $e = oci_error($this->connection);
